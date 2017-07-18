@@ -81,7 +81,7 @@ namespace StateMachineAndActor.Tyvj
                     }
                 case "ValidateUserOutput":
                     await SetStageAsync("ValidateUserOutput");
-                    var RunUserPrograms = StartedActors.FindActor("TyvjRunUserProgramActor"); // 获取运行用户程序Actors
+                    var RunUserPrograms = StartedActors.FindActor("RunUserProgram", "TyvjRunUserProgramActor").ToList(); // 获取运行用户程序Actors
                     var tasks4 = new List<Task>();
                     foreach (var x in RunUserPrograms)
                     {
@@ -104,18 +104,23 @@ namespace StateMachineAndActor.Tyvj
                         }
                         else // 如果运行没有失败，则部署Validator
                         {
-                            var answerFilename = x.Outputs.Single(y => InputFileRegex.IsMatch(y.Name)).Name.Replace("input_", "output_");
+                            var answerFilename = InitialBlobs.Single(y => y.Id == x.Inputs.FindBlob("stdin.txt").Id).Name.Replace("input_", "output_");
                             var answer = InitialBlobs.FindBlob(answerFilename);
                             var stdout = x.Outputs.Single(y => y.Name == "stdout.txt");
                             var validator = InitialBlobs.FindBlob("Validator.out");
-                            tasks4.Add(DeployAndRunActorAsync(new RunActorParam("TyvjCompareActor", new[] { new BlobInfo(answer.Id, "std.txt"), new BlobInfo(stdout.Id, "out.txt"), validator })));
+                            tasks4.Add(DeployAndRunActorAsync(new RunActorParam("TyvjCompareActor", new[] 
+                            {
+                                new BlobInfo(answer.Id, "std.txt"),
+                                new BlobInfo(stdout.Id, "out.txt"),
+                                validator
+                            })));
                         }
                     }
                     await Task.WhenAll(tasks4);
                     goto case "Finally";
                 case "Finally":
                     await SetStageAsync("Finally");
-                    var compareActors = StartedActors.FindActor("ValidateUserOutput", "TyvjCompareActor");
+                    var compareActors = StartedActors.FindActor("ValidateUserOutput", "TyvjCompareActor").ToList();
                     var tasks5 = new List<Task>();
                     foreach (var x in compareActors)
                     {

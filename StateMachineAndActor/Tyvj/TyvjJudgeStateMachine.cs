@@ -25,9 +25,6 @@ namespace StateMachineAndActor.Tyvj
 
         public override async Task RunAsync()
         {
-            // Prepare
-            var profile = await InitialBlobs.FindBlob("profile.json").ReadAsJsonAsync<dynamic>(this);
-
             switch (Stage)
             {
                 case "Start":
@@ -89,7 +86,7 @@ namespace StateMachineAndActor.Tyvj
                     foreach (var x in RunUserPrograms)
                     {
                         var json4 = await x.Outputs.FindBlob("runner.json").ReadAsJsonAsync<RunnerReturn>(this);
-                        if (json4.PeakMemory > profile.Memory) // 判断是否超出内存限制
+                        if (json4.PeakMemory > 134217728) // 判断是否超出内存限制
                         {
                             tasks4.Add(HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + this.Id, new
                             {

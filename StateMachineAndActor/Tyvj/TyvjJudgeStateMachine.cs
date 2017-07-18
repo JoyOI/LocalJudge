@@ -32,8 +32,8 @@ namespace StateMachineAndActor.Tyvj
                     // 开始部署编译Actor
                     await DeployAndRunActorAsync(new RunActorParam("TyvjCompileActor", InitialBlobs.Where(x => SourceCodeRegex.IsMatch(x.Name))));
                     goto case "RunUserProgram";
-                case "RunUserProgram": // 检查编译状态
-                    await SetStageAsync("ValidateUserCompileResult");
+                case "RunUserProgram":
+                    await SetStageAsync("RunUserProgram");
 
                     // 获取编译Actor的运行结果
                     var compileRunnerResult = await StartedActors
@@ -46,24 +46,24 @@ namespace StateMachineAndActor.Tyvj
                     {
                         if (compileRunnerResult.IsTimeout) // 超时
                         {
-                            await HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + this.Id, new
-                            {
-                                Result = "Compile Error",
-                                Error = "Compiler timeout.",
-                                TimeUsed = compileRunnerResult.UserTime
-                            });
+                            //await HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + this.Id, new
+                            //{
+                            //    Result = "Compile Error",
+                            //    Error = "Compiler timeout.",
+                            //    TimeUsed = compileRunnerResult.UserTime
+                            //});
                         }
                         else // 其他编译异常
                         {
-                            await HttpInvokeAsync(HttpMethod.Post , "/JudgeResult/" + this.Id, new
-                            {
-                                Result = "Compile Error",
-                                Error = StartedActors
-                                    .FindSingleActor("Start", "TyvjCompileActor")
-                                    .Outputs
-                                    .FindBlob("stderr.txt"),
-                                ExitCode = compileRunnerResult.ExitCode
-                            });
+                            //await HttpInvokeAsync(HttpMethod.Post , "/JudgeResult/" + this.Id, new
+                            //{
+                            //    Result = "Compile Error",
+                            //    Error = StartedActors
+                            //        .FindSingleActor("Start", "TyvjCompileActor")
+                            //        .Outputs
+                            //        .FindBlob("stderr.txt"),
+                            //    ExitCode = compileRunnerResult.ExitCode
+                            //});
                         }
                         break; // 终止状态机
                     }
@@ -88,19 +88,19 @@ namespace StateMachineAndActor.Tyvj
                         var json4 = await x.Outputs.FindBlob("runner.json").ReadAsJsonAsync<RunnerReturn>(this);
                         if (json4.PeakMemory > 134217728) // 判断是否超出内存限制
                         {
-                            tasks4.Add(HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + this.Id, new
-                            {
-                                Result = "Memory Limit Exceeded",
-                                InputFile = x.Inputs.Single(y => InputFileRegex.IsMatch(y.Name))
-                            }));
+                            //tasks4.Add(HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + this.Id, new
+                            //{
+                            //    Result = "Memory Limit Exceeded",
+                            //    InputFile = x.Inputs.Single(y => InputFileRegex.IsMatch(y.Name))
+                            //}));
                         }
                         else if (json4.ExitCode != 0) // 判断是否运行时错误或超时
                         {
-                            tasks4.Add(HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + this.Id, new
-                            {
-                                Result = json4.IsTimeout ? "Time Limit Exceeded" : "Runtime Error",
-                                InputFile = x.Inputs.Single(y => InputFileRegex.IsMatch(y.Name))
-                            }));
+                            //tasks4.Add(HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + this.Id, new
+                            //{
+                            //    Result = json4.IsTimeout ? "Time Limit Exceeded" : "Runtime Error",
+                            //    InputFile = x.Inputs.Single(y => InputFileRegex.IsMatch(y.Name))
+                            //}));
                         }
                         else // 如果运行没有失败，则部署Validator
                         {
@@ -120,13 +120,13 @@ namespace StateMachineAndActor.Tyvj
                     foreach (var x in compareActors)
                     {
                         var json5 = await x.Outputs.FindBlob("runner.json").ReadAsJsonAsync<RunnerReturn>(this);
-                        tasks5.Add(HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + Id, new
-                        {
-                            Result = json5.ExitCode == 0 ? "Accepted" : (json5.ExitCode == 1 ? "Wrong Answer" : (json5.ExitCode == 2 ? "Presentation Error" : "Validator Error")),
-                            TimeUsed = json5.UserTime,
-                            MemoryUsed = json5.PeakMemory,
-                            InputFile = x.Inputs.Single(y => OutputFileRegex.IsMatch(y.Name)).Name.Replace("output_", "input_")
-                        }));
+                        //tasks5.Add(HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + Id, new
+                        //{
+                        //    Result = json5.ExitCode == 0 ? "Accepted" : (json5.ExitCode == 1 ? "Wrong Answer" : (json5.ExitCode == 2 ? "Presentation Error" : "Validator Error")),
+                        //    TimeUsed = json5.UserTime,
+                        //    MemoryUsed = json5.PeakMemory,
+                        //    InputFile = x.Inputs.Single(y => OutputFileRegex.IsMatch(y.Name)).Name.Replace("output_", "input_")
+                        //}));
                     }
                     await Task.WhenAll(tasks5);
                     break;

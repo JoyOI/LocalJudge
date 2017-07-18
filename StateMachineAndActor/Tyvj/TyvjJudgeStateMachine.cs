@@ -17,7 +17,7 @@ namespace StateMachineAndActor.Tyvj
         public bool IsTimeout { get; set; }
     }
 
-    public class TyvjCppJudgeStateMachine : StateMachineBase
+    public class TyvjJudgeStateMachine : StateMachineBase
     {
         public static Regex SourceCodeRegex = new Regex("Main.[a-zA-Z]{1,5}");
         public static Regex InputFileRegex = new Regex("input_[0-9]{0,}.txt");

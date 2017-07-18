@@ -10,7 +10,7 @@ namespace JoyOI.ManagementService.Playground
         static void Main(string[] args)
         {
             var p = Process.Start(new ProcessStartInfo("runner") { RedirectStandardInput = true });
-            p.StandardInput.WriteLine("5000");
+            p.StandardInput.WriteLine("5000 5000");
             if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.c")))
                 p.StandardInput.WriteLine("gcc -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c99 Main.c");
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.cpp")))

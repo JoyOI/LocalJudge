@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Linq;
 
@@ -9,7 +10,8 @@ namespace StateMachineAndActor.Tyvj
 {
     public class RunnerReturn
     {
-        public int UsedTime { get; set; }
+        public int UserTime { get; set; }
+        public int TotalTime { get; set; }
         public int ExitCode { get; set; }
         public int PeakMemory { get; set; }
         public bool IsTimeout { get; set; }
@@ -24,7 +26,7 @@ namespace StateMachineAndActor.Tyvj
         public override async Task RunAsync()
         {
             // Prepare
-            var profile = await InitialBlobs.FindBlob("profile.json").ReadAsJsonAsync<dynamic>();
+            var profile = await InitialBlobs.FindBlob("profile.json").ReadAsJsonAsync<dynamic>(this);
 
             switch (Stage)
             {
@@ -40,23 +42,23 @@ namespace StateMachineAndActor.Tyvj
                     var compileRunnerResult = await StartedActors
                         .FindSingleActor("Start", "TyvjCompileActor")
                         .Outputs.FindBlob("runner.json")
-                        .ReadAsJsonAsync<RunnerReturn>();
+                        .ReadAsJsonAsync<RunnerReturn>(this);
 
                     // 如果程序返回值不为0
                     if (compileRunnerResult.ExitCode != 0)
                     {
                         if (compileRunnerResult.IsTimeout) // 超时
                         {
-                            await HttpInvokeAsync("PUT", "/JudgeResult/" + this.Id, new
+                            await HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + this.Id, new
                             {
                                 Result = "Compile Error",
                                 Error = "Compiler timeout.",
-                                TimeUsed = compileRunnerResult.UsedTime
+                                TimeUsed = compileRunnerResult.UserTime
                             });
                         }
                         else // 其他编译异常
                         {
-                            await HttpInvokeAsync("PUT", "/JudgeResult/" + this.Id, new
+                            await HttpInvokeAsync(HttpMethod.Post , "/JudgeResult/" + this.Id, new
                             {
                                 Result = "Compile Error",
                                 Error = StartedActors
@@ -86,10 +88,10 @@ namespace StateMachineAndActor.Tyvj
                     var tasks4 = new List<Task>();
                     foreach (var x in RunUserPrograms)
                     {
-                        var json4 = await x.Outputs.FindBlob("runner.json").ReadAsJsonAsync<RunnerReturn>();
+                        var json4 = await x.Outputs.FindBlob("runner.json").ReadAsJsonAsync<RunnerReturn>(this);
                         if (json4.PeakMemory > profile.Memory) // 判断是否超出内存限制
                         {
-                            tasks4.Add(HttpInvokeAsync("PUT", "/JudgeResult/" + this.Id, new
+                            tasks4.Add(HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + this.Id, new
                             {
                                 Result = "Memory Limit Exceeded",
                                 InputFile = x.Inputs.Single(y => InputFileRegex.IsMatch(y.Name))
@@ -97,7 +99,7 @@ namespace StateMachineAndActor.Tyvj
                         }
                         else if (json4.ExitCode != 0) // 判断是否运行时错误或超时
                         {
-                            tasks4.Add(HttpInvokeAsync("PUT", "/JudgeResult/" + this.Id, new
+                            tasks4.Add(HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + this.Id, new
                             {
                                 Result = json4.IsTimeout ? "Time Limit Exceeded" : "Runtime Error",
                                 InputFile = x.Inputs.Single(y => InputFileRegex.IsMatch(y.Name))
@@ -120,11 +122,11 @@ namespace StateMachineAndActor.Tyvj
                     var tasks5 = new List<Task>();
                     foreach (var x in compareActors)
                     {
-                        var json5 = await x.Outputs.FindBlob("runner.json").ReadAsJsonAsync<RunnerReturn>();
-                        tasks5.Add(HttpInvokeAsync("PUT", "/JudgeResult/" + Id, new
+                        var json5 = await x.Outputs.FindBlob("runner.json").ReadAsJsonAsync<RunnerReturn>(this);
+                        tasks5.Add(HttpInvokeAsync(HttpMethod.Post, "/JudgeResult/" + Id, new
                         {
                             Result = json5.ExitCode == 0 ? "Accepted" : (json5.ExitCode == 1 ? "Wrong Answer" : (json5.ExitCode == 2 ? "Presentation Error" : "Validator Error")),
-                            TimeUsed = json5.UsedTime,
+                            TimeUsed = json5.UserTime,
                             MemoryUsed = json5.PeakMemory,
                             InputFile = x.Inputs.Single(y => OutputFileRegex.IsMatch(y.Name)).Name.Replace("output_", "input_")
                         }));

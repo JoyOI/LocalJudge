@@ -75,6 +75,11 @@ namespace StateMachineAndActor.Tyvj
                                     .FindSingleActor("Start", "TyvjCompileActor")
                                     .Outputs
                                     .FindSingleBlob("stderr.txt")
+                                    .ReadAllTextAsync(this) 
+                                    + await StartedActors
+                                    .FindSingleActor("Start", "TyvjCompileActor")
+                                    .Outputs
+                                    .FindSingleBlob("stdout.txt")
                                     .ReadAllTextAsync(this)
                             });
                         }
@@ -136,7 +141,7 @@ namespace StateMachineAndActor.Tyvj
                         }
                         else // 如果运行没有失败，则部署Validator
                         {
-                            var answerFilename = InitialBlobs.Single(y => y.Id == x.Inputs.FindSingleBlob("stdin.txt").Id).Name.Replace("input_", "output_");
+                            var answerFilename = InitialBlobs.Single(y => y.Id == x.Inputs.FindSingleBlob("stdin.txt").Id && InputFileRegex.IsMatch(y.Name)).Name.Replace("input_", "output_");
                             var answer = InitialBlobs.FindSingleBlob(answerFilename);
                             var stdout = x.Outputs.Single(y => y.Name == "stdout.txt");
                             var validator = InitialBlobs.FindSingleBlob("Validator.out");

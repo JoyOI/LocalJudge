@@ -16,7 +16,7 @@ namespace JoyOI.ManagementService.Playground
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.cpp")))
                 p.StandardInput.WriteLine("g++ -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c++98 Main.cpp");
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.pas")))
-                p.StandardInput.WriteLine("fpc -O2 -o Main.out -dONLINE_JUDGE Main.pas");
+                p.StandardInput.WriteLine("fpc -O2 -oMain.out -dONLINE_JUDGE Main.pas");
             else
                 throw new NotSupportedException("Your source code does not support to compile.");
             p.WaitForExit();

@@ -10,7 +10,11 @@ namespace JoyOI.ManagementService.Playground
         {
             var p = Process.Start(new ProcessStartInfo("runner") { RedirectStandardInput = true });
             p.StandardInput.WriteLine("1000 2000");
-            p.StandardInput.WriteLine("./Main.out");
+            if (File.Exists("Main.class"))
+                p.StandardInput.WriteLine("java Main");
+            else
+                p.StandardInput.WriteLine("./Main.out");
+            p.StandardInput.Close();
             p.WaitForExit();
             var json = JsonConvert.SerializeObject(new
             {

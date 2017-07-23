@@ -31,7 +31,6 @@ namespace StateMachineAndActor.Tyvj
 
     public class TyvjJudgeStateMachine : StateMachineBase
     {
-        public static Regex SourceCodeRegex = new Regex("Main.[a-zA-Z]{1,5}");
         public static Regex InputFileRegex = new Regex("input_[0-9]{0,}.txt");
         public static Regex OutputFileRegex = new Regex("output_[0-9]{0,}.txt");
 
@@ -42,7 +41,7 @@ namespace StateMachineAndActor.Tyvj
                 case "Start":
                     await SetStageAsync("Start");
                     // 开始部署编译Actor
-                    await DeployAndRunActorAsync(new RunActorParam("TyvjCompileActor", InitialBlobs.Where(x => SourceCodeRegex.IsMatch(x.Name))));
+                    await DeployAndRunActorAsync(new RunActorParam("TyvjCompileActor", InitialBlobs.Where(x => x.Name.StartsWith("Main"))));
                     goto case "RunUserProgram";
                 case "RunUserProgram":
                     await SetStageAsync("RunUserProgram");

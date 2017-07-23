@@ -57,10 +57,11 @@ namespace Deploy
         {
             var client = new ManagementServiceClient("https://mgmtsvc.1234.sh", @"C:\Users\Yuko\Documents\webapi-client.pfx", "123456");
             client.PatchStateMachineDefinitionAsync("TyvjJudgeStateMachine", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\Tyvj\TyvjJudgeStateMachine.cs"), null).Wait();
-            //client.PatchActorAsync("TyvjCompareActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\Tyvj\TyvjCompareActor.cs"), default(CancellationToken)).Wait();
+            client.PatchActorAsync("TyvjCompareActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\Tyvj\TyvjCompareActor.cs"), default(CancellationToken)).Wait();
             client.PatchActorAsync("TyvjCompileActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\Tyvj\TyvjCompileActor.cs"), default(CancellationToken)).Wait();
-            //client.PatchActorAsync("TyvjRunUserProgramActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\Tyvj\TyvjRunUserProgramActor.cs"), default(CancellationToken)).Wait();
-            //client.PutBlobAsync("Validator.out", File.ReadAllBytes(@"C:\Users\Yuko\Documents\Validator.out"));
+            client.PatchActorAsync("TyvjRunUserProgramActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\Tyvj\TyvjRunUserProgramActor.cs"), default(CancellationToken)).Wait();
+            //var validatorId = client.PutBlobAsync("Validator.out", File.ReadAllBytes(@"C:\Users\Yuko\Documents\Validator.out")).Result;
+            //Console.WriteLine(validatorId);
             //client.PutBlobAsync("Main.cpp", File.ReadAllBytes(@"C:\Users\Yuko\Documents\Main.cpp"));
             //client.PutBlobAsync("input_01.txt", File.ReadAllBytes(@"C:\Users\Yuko\Documents\input_01.txt"));
             //client.PutBlobAsync("input_02.txt", File.ReadAllBytes(@"C:\Users\Yuko\Documents\input_02.txt"));

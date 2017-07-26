@@ -30,19 +30,11 @@ namespace JoyOI.ManagementService.Playground
             else
                 throw new NotSupportedException("Your source code does not support to compile.");
             p.WaitForExit();
-            if (File.Exists("Main.out"))
+            if (File.Exists(compileOutputFilename))
             {
                 var json = JsonConvert.SerializeObject(new
                 {
-                    Outputs = new string[] { "runner.json", "Main.out", "stdout.txt", "stderr.txt" }
-                });
-                File.WriteAllText("return.json", json);
-            }
-            else if (File.Exists("Main.class"))
-            {
-                var json = JsonConvert.SerializeObject(new
-                {
-                    Outputs = new string[] { "runner.json", "Main.class", "stdout.txt", "stderr.txt" }
+                    Outputs = new string[] { "runner.json", compileOutputFilename, "stdout.txt", "stderr.txt" }
                 });
                 File.WriteAllText("return.json", json);
             }

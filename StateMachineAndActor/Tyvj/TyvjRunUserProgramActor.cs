@@ -11,7 +11,7 @@ namespace JoyOI.ManagementService.Playground
             var p = Process.Start(new ProcessStartInfo("runner") { RedirectStandardInput = true });
             p.StandardInput.WriteLine("1000 2000");
             if (File.Exists("Main.class"))
-                p.StandardInput.WriteLine("java Main");
+                p.StandardInput.WriteLine("java Main -Xms128m -Xmx256m");
             else
                 p.StandardInput.WriteLine("./Main.out");
             p.StandardInput.Close();

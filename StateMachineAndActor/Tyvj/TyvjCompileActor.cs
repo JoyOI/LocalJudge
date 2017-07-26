@@ -24,7 +24,7 @@ namespace JoyOI.ManagementService.Playground
                 p.StandardInput.WriteLine("fpc -O2 -oMain.out -dONLINE_JUDGE Main.pas");
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.java")))
             {
-                p.StandardInput.WriteLine("javac Main.java");
+                p.StandardInput.WriteLine("javac Main.java -J-Xms128m -J-Xmx256m");
                 compileOutputFilename = "Main.class";
             }
             else

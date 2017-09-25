@@ -57,10 +57,10 @@ namespace Deploy
         {
             var client = new ManagementServiceClient("https://mgmtsvc.1234.sh", @"C:\Users\Yuko\Documents\webapi-client.pfx", "123456");
             //client.PutStateMachineDefinitionAsync("TyvjJudgeStateMachine", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\Tyvj\TyvjJudgeStateMachine.cs"), null).Wait();
-            client.PutStateMachineDefinitionAsync("CompileOnlyStateMachine", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\CompileOnlyStateMachine.cs"), null).Wait();
+            client.PatchStateMachineDefinitionAsync("CompileOnlyStateMachine", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\CompileOnlyStateMachine.cs"), null).Wait();
             //client.PutActorAsync("TyvjCompareActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\Tyvj\TyvjCompareActor.cs"), default(CancellationToken)).Wait();
             //client.PutActorAsync("TyvjCompileActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\Tyvj\TyvjCompileActor.cs"), default(CancellationToken)).Wait();
-            client.PutActorAsync("CompileActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\CompileActor.cs"), default(CancellationToken)).Wait();
+            //client.PatchActorAsync("CompileActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\CompileActor.cs"), default(CancellationToken)).Wait();
             //client.PutActorAsync("TyvjRunUserProgramActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\StateMachineAndActor\StateMachineAndActor\Tyvj\TyvjRunUserProgramActor.cs"), default(CancellationToken)).Wait();
             //var validatorId = client.PutBlobAsync("Validator.out", File.ReadAllBytes(@"C:\Users\Yuko\Documents\Validator.out")).Result;
             //Console.WriteLine(validatorId);

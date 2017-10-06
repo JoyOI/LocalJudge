@@ -29,7 +29,7 @@ namespace StateMachineAndActor.Tyvj
         public string Hint { get; set; }
     }
 
-    public class TyvjJudgeStateMachine : StateMachineBase
+    public class JudgeStateMachine : StateMachineBase
     {
         public static Regex InputFileRegex = new Regex("input_[0-9]{0,}.txt");
         public static Regex OutputFileRegex = new Regex("output_[0-9]{0,}.txt");

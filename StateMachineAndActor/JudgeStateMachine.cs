@@ -55,13 +55,19 @@ namespace StateMachineAndActor.JoyOI
                         var runActorParams = new List<RunActorParam>();
                         var inputs = InitialBlobs.Where(x => InputFileRegex.IsMatch(x.Name));
                         var userProgram = StartedActors.FindSingleActor("Start", "CompileActor").Outputs.FindSingleBlob("Main.out"); // 找到用户程序
+                        var i = 0;
                         foreach (var x in inputs)
                         {
+                            var blobs = new[] 
+                            {
+                                new BlobInfo(x.Id, "stdin.txt"),
+                                InitialBlobs.FindSingleBlob("limit.json"),
+                                userProgram
+                            };
                             runActorParams.Add(new RunActorParam(
                                 "RunUserProgramActor",
-                                new BlobInfo(x.Id, "stdin.txt"),
-                                InitialBlobs.FindSingleBlob("limit.json"), 
-                                userProgram));
+                                blobs,
+                                i++.ToString()));
                         }
                         await DeployAndRunActorsAsync(runActorParams.ToArray());
                         goto case "ValidateUserOutput";
@@ -96,10 +102,11 @@ namespace StateMachineAndActor.JoyOI
                             var validator = InitialBlobs.FindSingleBlob("Validator.out");
                             deployments.Add(new RunActorParam("CompareActor", new[]
                             {
-                                new BlobInfo(answer.Id, "std.txt", x.Inputs.FindSingleBlob("stdin.txt").Id.ToString()),
-                                new BlobInfo(stdout.Id, "out.txt"),
+                                new BlobInfo(answer.Id, "std.txt", x.Inputs.FindSingleBlob("stdin.txt").Tag),
+                                new BlobInfo(stdout.Id, "out.txt", x.Inputs.FindSingleBlob("stdin.txt").Tag),
                                 validator
-                            }));
+                            }, 
+                            x.Tag));
                         }
                     }
                     tasks4.Add(DeployAndRunActorsAsync(deployments.ToArray()));

@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Net.Http;
+using System;
 
 namespace StateMachineAndActor.JoyOI
 {
@@ -111,8 +113,15 @@ namespace StateMachineAndActor.JoyOI
                     }
                     tasks4.Add(DeployAndRunActorsAsync(deployments.ToArray()));
                     await Task.WhenAll(tasks4);
+                    await HttpInvokeAsync(HttpMethod.Post, "/management/stagechange/" + this.Id, null);
                     break;
             }
+        }
+
+        public override Task HandleErrorAsync(Exception ex)
+        {
+            HttpInvokeAsync(HttpMethod.Post, "/management/stagechange/" + this.Id, null);
+            return base.HandleErrorAsync(ex);
         }
     }
 }

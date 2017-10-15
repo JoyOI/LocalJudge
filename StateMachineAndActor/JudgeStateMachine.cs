@@ -113,14 +113,14 @@ namespace StateMachineAndActor.JoyOI
                     }
                     tasks4.Add(DeployAndRunActorsAsync(deployments.ToArray()));
                     await Task.WhenAll(tasks4);
-                    await HttpInvokeAsync(HttpMethod.Post, "/management/stagechange/" + this.Id, null);
+                    await HttpInvokeAsync(HttpMethod.Post, "/management/judge/stagechange/" + this.Id, null);
                     break;
             }
         }
 
         public override Task HandleErrorAsync(Exception ex)
         {
-            HttpInvokeAsync(HttpMethod.Post, "/management/stagechange/" + this.Id, null);
+            HttpInvokeAsync(HttpMethod.Post, "/management/judge/stagechange/" + this.Id, null);
             return base.HandleErrorAsync(ex);
         }
     }

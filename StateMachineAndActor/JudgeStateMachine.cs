@@ -74,7 +74,10 @@ namespace StateMachineAndActor.JoyOI
                         await DeployAndRunActorsAsync(runActorParams.ToArray());
                         goto case "ValidateUserOutput";
                     }
-                    goto case "Finally";
+                    else
+                    {
+                        goto case "Finally";
+                    }
                 case "ValidateUserOutput":
                     await SetStageAsync("ValidateUserOutput");
                     var RunUserPrograms = StartedActors.FindActor("RunUserProgram", "RunUserProgramActor").ToList(); // 获取运行用户程序Actors
@@ -123,7 +126,7 @@ namespace StateMachineAndActor.JoyOI
 
         public override Task HandleErrorAsync(Exception ex)
         {
-            HttpInvokeAsync(HttpMethod.Post, "/management/judge/stagechange/" + this.Id, null);
+            HttpInvokeAsync(HttpMethod.Post, "/management/judge/stagechange/" + this.Id + "?se=true", null);
             return base.HandleErrorAsync(ex);
         }
     }

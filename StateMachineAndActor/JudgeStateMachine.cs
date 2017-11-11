@@ -60,7 +60,7 @@ namespace StateMachineAndActor.JoyOI
                         var i = 0;
                         foreach (var x in inputs)
                         {
-                            var blobs = new[] 
+                            var blobs = new[]
                             {
                                 new BlobInfo(x.Id, "stdin.txt"),
                                 InitialBlobs.FindSingleBlob("limit.json"),
@@ -74,7 +74,7 @@ namespace StateMachineAndActor.JoyOI
                         await DeployAndRunActorsAsync(runActorParams.ToArray());
                         goto case "ValidateUserOutput";
                     }
-                    break;
+                    goto case "Finally";
                 case "ValidateUserOutput":
                     await SetStageAsync("ValidateUserOutput");
                     var RunUserPrograms = StartedActors.FindActor("RunUserProgram", "RunUserProgramActor").ToList(); // 获取运行用户程序Actors
@@ -113,6 +113,9 @@ namespace StateMachineAndActor.JoyOI
                     }
                     tasks4.Add(DeployAndRunActorsAsync(deployments.ToArray()));
                     await Task.WhenAll(tasks4);
+                    goto case "Finally";
+                case "Finally":
+                    await SetStageAsync("Finally");
                     await HttpInvokeAsync(HttpMethod.Post, "/management/judge/stagechange/" + this.Id, null);
                     break;
             }

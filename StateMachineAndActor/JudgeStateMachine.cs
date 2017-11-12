@@ -89,15 +89,15 @@ namespace StateMachineAndActor.JoyOI
                         var json4 = await x.Outputs.FindSingleBlob("runner.json").ReadAsJsonAsync<RunnerReturn>(this);
                         if (json4.PeakMemory > limit.Memory) // 判断是否超出内存限制
                         {
-                            break;
+                            continue;
                         }
                         else if (json4.IsTimeout)// 判断是否超时
                         {
-                            break;
+                            continue;
                         }
                         else if (json4.ExitCode != 0) // 判断是否运行时错误
                         {
-                            break;
+                            continue;
                         }
                         else // 如果运行没有失败，则部署Validator
                         {

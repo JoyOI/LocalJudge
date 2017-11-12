@@ -101,9 +101,9 @@ namespace StateMachineAndActor.JoyOI
                         }
                         else // 如果运行没有失败，则部署Validator
                         {
-                            var answerFilename = InitialBlobs.Single(y => y.Id == x.Inputs.FindSingleBlob("stdin.txt").Id && InputFileRegex.IsMatch(y.Name)).Name.Replace("input_", "output_");
+                            var answerFilename = InitialBlobs.First(y => y.Id == x.Inputs.FindSingleBlob("stdin.txt").Id && InputFileRegex.IsMatch(y.Name)).Name.Replace("input_", "output_");
                             var answer = InitialBlobs.FindSingleBlob(answerFilename);
-                            var stdout = x.Outputs.Single(y => y.Name == "stdout.txt");
+                            var stdout = x.Outputs.First(y => y.Name == "stdout.txt");
                             var validator = InitialBlobs.FindSingleBlob("Validator.out");
                             deployments.Add(new RunActorParam("CompareActor", new[]
                             {

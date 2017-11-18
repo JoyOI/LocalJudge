@@ -56,7 +56,7 @@ namespace StateMachineAndActor.JoyOI
                     {
                         var runActorParams = new List<RunActorParam>();
                         var inputs = InitialBlobs.Where(x => InputFileRegex.IsMatch(x.Name));
-                        var userProgram = StartedActors.FindSingleActor("Start", "CompileActor").Outputs.FindSingleBlob("Main.out"); // 找到用户程序
+                        var userProgram = StartedActors.FindSingleActor("Start", "CompileActor").Outputs.Single(x => x.Name.StartsWith("Main.")); // 找到用户程序
                         var i = 0;
                         foreach (var x in inputs)
                         {

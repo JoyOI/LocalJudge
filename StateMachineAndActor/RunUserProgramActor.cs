@@ -17,8 +17,16 @@ namespace StateMachineAndActor.JoyOI
         {
             var meta = JsonConvert.DeserializeObject<Meta>(File.ReadAllText("limit.json"));
             var p = Process.Start(new ProcessStartInfo("runner") { RedirectStandardInput = true });
-            p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime }");
-            p.StandardInput.WriteLine("./Main.out");
+            if (File.Exists("Main.class"))
+            {
+                p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime } 0");
+                p.StandardInput.WriteLine("java Main -Xms128m -Xmx256m");
+            }
+            else
+            {
+                p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime }");
+                p.StandardInput.WriteLine("./Main.out");
+            }
             p.StandardInput.Close();
             p.WaitForExit();
             var json = JsonConvert.SerializeObject(new

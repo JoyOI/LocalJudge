@@ -11,22 +11,32 @@ namespace JoyOI.ManagementService.Actors
         {
             var compileOutputFilename = "Main.out";
             var p = Process.Start(new ProcessStartInfo("runner") { RedirectStandardInput = true });
-            p.StandardInput.WriteLine("5000 5000");
+            var limitationInput = "5000 5000";
+            var commandInput = "";
 
             if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.c")))
-                p.StandardInput.WriteLine("gcc -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c99 Main.c");
+                commandInput = "gcc -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c99 Main.c";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.cpp")))
-                p.StandardInput.WriteLine("g++ -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c++98 Main.cpp");
+                commandInput = "g++ -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c++98 Main.cpp";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main11.cpp")))
-                p.StandardInput.WriteLine("g++ -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c++11 Main11.cpp");
+                commandInput = "g++ -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c++11 Main11.cpp";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main14.cpp")))
-                p.StandardInput.WriteLine("g++ -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c++14 Main14.cpp");
+                commandInput = "g++ -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c++14 Main14.cpp";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.pas")))
-                p.StandardInput.WriteLine("fpc -O2 -oMain.out -dONLINE_JUDGE Main.pas");
+                commandInput = "fpc -O2 -oMain.out -dONLINE_JUDGE Main.pas";
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.java")))
+            {
+                commandInput = "javac Main.java -J-Xms128m -J-Xmx256m";
+                compileOutputFilename = "Main.class";
+                limitationInput = "5000 10000 0";
+            }
             else
             {
                 throw new NotSupportedException("Your source code does not support to compile.");
             }
+
+            p.StandardInput.WriteLine(limitationInput);
+            p.StandardInput.WriteLine(commandInput);
             p.WaitForExit();
 
             if (File.Exists(compileOutputFilename))

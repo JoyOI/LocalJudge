@@ -59,7 +59,7 @@ namespace Deploy
             //client.PutStateMachineDefinitionAsync("TyvjJudgeStateMachine", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\Tyvj\TyvjJudgeStateMachine.cs"), null).Wait();
             client.PatchStateMachineDefinitionAsync("CompileOnlyStateMachine", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\CompileOnlyStateMachine.cs"), null).Wait();
             client.PatchStateMachineDefinitionAsync("JudgeStateMachine", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\JudgeStateMachine.cs"), null).Wait();
-            //client.PutActorAsync("CompareActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\CompareActor.cs")).Wait();
+            client.PatchActorAsync("CompareActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\CompareActor.cs")).Wait();
             client.PatchActorAsync("RunUserProgramActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\RunUserProgramActor.cs")).Wait();
             //client.PutActorAsync("TyvjCompareActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\Tyvj\TyvjCompareActor.cs"), default(CancellationToken)).Wait();
             //client.PutActorAsync("TyvjCompileActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\Tyvj\TyvjCompileActor.cs"), default(CancellationToken)).Wait();

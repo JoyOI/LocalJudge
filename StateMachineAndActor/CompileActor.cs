@@ -35,9 +35,10 @@ namespace JoyOI.ManagementService.Actors
             // Prepare for python
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.py")))
             {
+                File.WriteAllText("runner.json", "{ \"ExitCode\": 0 }");
                 var json = JsonConvert.SerializeObject(new
                 {
-                    Outputs = new string[] { "Main.py" }
+                    Outputs = new string[] { "Main.py", "runner.json" }
                 });
                 File.WriteAllText("return.json", json);
                 Environment.Exit(0);

@@ -32,6 +32,16 @@ namespace JoyOI.ManagementService.Actors
                 const string fsproj = @"<Project Sdk=""Microsoft.NET.Sdk""><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>netcoreapp2.0</TargetFramework></PropertyGroup></Project>";
                 File.WriteAllText("Main.fsproj", fsproj);
             }
+            // Prepare for python
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.py")))
+            {
+                var json = JsonConvert.SerializeObject(new
+                {
+                    Outputs = new string[] { "Main.py" }
+                });
+                File.WriteAllText("return.json", json);
+                Environment.Exit(0);
+            }
         }
 
         static void Compile()

@@ -42,10 +42,19 @@ namespace StateMachineAndActor.JoyOI
                 p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime } 0");
                 p.StandardInput.WriteLine("dotnet Main.dll");
             }
-            else
+            else if (File.Exists("Main.out"))
             {
                 p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime }");
                 p.StandardInput.WriteLine("./Main.out");
+            }
+            else if (File.Exists("Main.py"))
+            {
+                p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime } 0");
+                p.StandardInput.WriteLine("python Main.py");
+            }
+            else
+            {
+                throw new FileNotFoundException("The executable file not found.");
             }
             p.StandardInput.Close();
             p.WaitForExit();

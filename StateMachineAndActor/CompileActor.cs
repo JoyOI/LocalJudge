@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -8,6 +9,32 @@ namespace JoyOI.ManagementService.Actors
     class CompileActor
     {
         static void Main(string[] args)
+        {
+            Prepare();
+            Compile();
+        }
+
+        static void Prepare()
+        {
+            // Prepare for c#
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.cs")))
+            {
+                const string csproj = @"<Project Sdk=""Microsoft.NET.Sdk""><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>netcoreapp2.0</TargetFramework></PropertyGroup></Project>";
+                File.WriteAllText("Main.csproj", csproj);
+            }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.vb")))
+            {
+                const string vbproj = @"<Project Sdk=""Microsoft.NET.Sdk""><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>netcoreapp2.0</TargetFramework></PropertyGroup></Project>";
+                File.WriteAllText("Main.vbproj", vbproj);
+            }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.fs")))
+            {
+                const string fsproj = @"<Project Sdk=""Microsoft.NET.Sdk""><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>netcoreapp2.0</TargetFramework></PropertyGroup></Project>";
+                File.WriteAllText("Main.fsproj", fsproj);
+            }
+        }
+
+        static void Compile()
         {
             var compileOutputFilename = "Main.out";
             var p = Process.Start(new ProcessStartInfo("runner") { RedirectStandardInput = true });
@@ -28,6 +55,24 @@ namespace JoyOI.ManagementService.Actors
             {
                 commandInput = "javac Main.java -J-Xms128m -J-Xmx256m";
                 compileOutputFilename = "Main.class";
+                limitationInput = "5000 10000 0";
+            }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.cs")))
+            {
+                commandInput = "dotnet build -o ./ -c Release";
+                compileOutputFilename = "Main.dll";
+                limitationInput = "5000 10000 0";
+            }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.vb")))
+            {
+                commandInput = "dotnet build -o ./ -c Release";
+                compileOutputFilename = "Main.dll";
+                limitationInput = "5000 10000 0";
+            }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.fs")))
+            {
+                commandInput = "dotnet build -o ./ -c Release";
+                compileOutputFilename = "Main.dll";
                 limitationInput = "5000 10000 0";
             }
             else

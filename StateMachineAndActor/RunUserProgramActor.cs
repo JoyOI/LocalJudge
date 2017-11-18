@@ -15,12 +15,32 @@ namespace StateMachineAndActor.JoyOI
     {
         static void Main(string[] args)
         {
+            Prepare();
+            Run();
+        }
+
+        static void Prepare()
+        {
+            if (File.Exists("Main.dll"))
+            {
+                const string runtimeConfig = @"{ ""runtimeOptions"": { ""tfm"": ""netcoreapp2.0"", ""framework"": { ""name"": ""Microsoft.NETCore.App"", ""version"": ""2.0.0"" } } }";
+                File.WriteAllText("Main.runtimeconfig.json", runtimeConfig);
+            }
+        }
+
+        static void Run()
+        {
             var meta = JsonConvert.DeserializeObject<Meta>(File.ReadAllText("limit.json"));
             var p = Process.Start(new ProcessStartInfo("runner") { RedirectStandardInput = true });
             if (File.Exists("Main.class"))
             {
                 p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime } 0");
                 p.StandardInput.WriteLine("java Main -Xms128m -Xmx256m");
+            }
+            else if (File.Exists("Main.dll"))
+            {
+                p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime } 0");
+                p.StandardInput.WriteLine("dotnet Main.dll");
             }
             else
             {

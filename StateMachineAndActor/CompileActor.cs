@@ -63,8 +63,8 @@ namespace JoyOI.ManagementService.Actors
                 commandInput = "fpc -O2 -oMain.out -dONLINE_JUDGE Main.pas";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.java")))
             {
-                commandInput = "javac Main.java -J-Xms128m -J-Xmx256m";
-                compileOutputFilename = "Main.class";
+                commandInput = "javac-jar Main.java Main Main.jar";
+                compileOutputFilename = "Main.jar";
                 limitationInput = "5000 10000 0";
             }
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.cs")))

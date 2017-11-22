@@ -32,10 +32,10 @@ namespace StateMachineAndActor.JoyOI
         {
             var meta = JsonConvert.DeserializeObject<Meta>(File.ReadAllText("limit.json"));
             var p = Process.Start(new ProcessStartInfo("runner") { RedirectStandardInput = true });
-            if (File.Exists("Main.class"))
+            if (File.Exists("Main.jar"))
             {
                 p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime } 0");
-                p.StandardInput.WriteLine("java Main -Xms128m -Xmx256m");
+                p.StandardInput.WriteLine("java -jar Main.jar -Xms128m -Xmx256m");
             }
             else if (File.Exists("Main.dll"))
             {

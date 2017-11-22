@@ -35,10 +35,10 @@ namespace StateMachineAndActor.JoyOI
                 p.StandardInput.WriteLine("5000 10000 0");
                 p.StandardInput.WriteLine("dotnet Validator.dll");
             }
-            else if (File.Exists("Validator.class"))
+            else if (File.Exists("Validator.jar"))
             {
                 p.StandardInput.WriteLine("5000 10000 0");
-                p.StandardInput.WriteLine("java Validator -Xms128m -Xmx256m");
+                p.StandardInput.WriteLine("java -jar Validator.jar -Xms128m -Xmx256m");
             }
             else if (File.Exists("Validator.py"))
             {

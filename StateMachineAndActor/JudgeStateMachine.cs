@@ -35,6 +35,12 @@ namespace StateMachineAndActor.JoyOI
 
         public override async Task RunAsync()
         {
+            if (InitialBlobs.Any(x => x.Name.EndsWith(".cs") || x.Name.EndsWith(".fs") || x.Name.EndsWith(".vb")))
+            {
+                this.Limitation.Memory = 1024 * 1024 * 1024;
+                this.Limitation.Ulimit["nproc"] = 128;
+            }
+
             switch (Stage)
             {
                 case "Start":

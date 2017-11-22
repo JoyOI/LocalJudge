@@ -50,7 +50,7 @@ namespace StateMachineAndActor.JoyOI
             else if (File.Exists("Main.py"))
             {
                 p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime } 0");
-                p.StandardInput.WriteLine("python Main.py");
+                p.StandardInput.WriteLine("python3 Main.py");
             }
             else
             {

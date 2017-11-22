@@ -66,25 +66,25 @@ namespace JoyOI.ManagementService.Actors
             {
                 commandInput = "javac Main.java -J-Xms128m -J-Xmx256m";
                 compileOutputFilename = "Main.class";
-                limitationInput = "5000 10000 0";
+                limitationInput = "5000 15000 0";
             }
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.cs")))
             {
                 commandInput = "dotnet build -o ./ -c Release";
                 compileOutputFilename = "Main.dll";
-                limitationInput = "5000 10000 0";
+                limitationInput = "5000 15000 0";
             }
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.vb")))
             {
                 commandInput = "dotnet build -o ./ -c Release";
                 compileOutputFilename = "Main.dll";
-                limitationInput = "5000 10000 0";
+                limitationInput = "5000 15000 0";
             }
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.fs")))
             {
                 commandInput = "dotnet build -o ./ -c Release";
                 compileOutputFilename = "Main.dll";
-                limitationInput = "5000 10000 0";
+                limitationInput = "5000 15000 0";
             }
             else
             {

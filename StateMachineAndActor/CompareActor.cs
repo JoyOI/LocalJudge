@@ -43,7 +43,7 @@ namespace StateMachineAndActor.JoyOI
             else if (File.Exists("Validator.py"))
             {
                 p.StandardInput.WriteLine("5000 10000 0");
-                p.StandardInput.WriteLine("python Validator.py");
+                p.StandardInput.WriteLine("python3 Validator.py");
             }
             else
             {

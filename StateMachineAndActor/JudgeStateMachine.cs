@@ -110,7 +110,7 @@ namespace StateMachineAndActor.JoyOI
                             var answerFilename = InitialBlobs.First(y => y.Id == x.Inputs.FindSingleBlob("stdin.txt").Id && InputFileRegex.IsMatch(y.Name)).Name.Replace("input_", "output_");
                             var answer = InitialBlobs.FindSingleBlob(answerFilename);
                             var stdout = x.Outputs.First(y => y.Name == "stdout.txt");
-                            var validator = InitialBlobs.FindSingleBlob("Validator.out");
+                            var validator = InitialBlobs.First(y => y.Name.StartsWith("Validator"));
                             deployments.Add(new RunActorParam("CompareActor", new[]
                             {
                                 new BlobInfo(answer.Id, "std.txt", x.Inputs.FindSingleBlob("stdin.txt").Tag),

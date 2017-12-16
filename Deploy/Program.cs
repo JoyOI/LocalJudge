@@ -58,9 +58,12 @@ namespace Deploy
             var client = new ManagementServiceClient("https://mgmtsvc.1234.sh", @"C:\Users\Yuko\Documents\webapi-client.pfx", "123456");
             client.PatchStateMachineDefinitionAsync("CompileOnlyStateMachine", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\CompileOnlyStateMachine.cs"), null).Wait();
             client.PatchStateMachineDefinitionAsync("JudgeStateMachine", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\JudgeStateMachine.cs"), null).Wait();
+            client.PatchStateMachineDefinitionAsync("HackStateMachine", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\Hack\HackStateMachine.cs"), null).Wait();
             client.PatchActorAsync("CompareActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\CompareActor.cs")).Wait();
             client.PatchActorAsync("RunUserProgramActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\RunUserProgramActor.cs")).Wait();
             client.PatchActorAsync("CompileActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\CompileActor.cs"), default(CancellationToken)).Wait();
+            client.PatchActorAsync("HackActor", File.ReadAllText(@"C:\Users\Yuko\Documents\GitHub\LocalJudge\StateMachineAndActor\Hack\HackRunActor.cs"), default(CancellationToken)).Wait();
+
             //var validatorId = client.PutBlobAsync("Validator.out", File.ReadAllBytes(@"C:\Users\Yuko\Documents\Validator.out")).Result;
             //Console.WriteLine(validatorId);
             Console.Read();

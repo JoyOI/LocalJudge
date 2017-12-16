@@ -4,6 +4,12 @@ using System.IO;
 
 namespace StateMachineAndActor.JoyOI.Hack
 {
+    class Meta
+    {
+        public int PhysicalTime { get; set; }
+        public int UserTime { get; set; }
+    }
+
     class ValidateHackDataActor
     {
         static void Main(string[] args)
@@ -27,22 +33,22 @@ namespace StateMachineAndActor.JoyOI.Hack
             var p = Process.Start(new ProcessStartInfo("runner") { RedirectStandardInput = true });
             if (File.Exists("Main.jar"))
             {
-                p.StandardInput.WriteLine($"{ 5000 } { 10000 } 0");
+                p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime } 0");
                 p.StandardInput.WriteLine("java -jar Main.jar -Xms128m -Xmx256m");
             }
             else if (File.Exists("Main.dll"))
             {
-                p.StandardInput.WriteLine($"{ 5000 } { 10000 } 0");
+                p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime } 0");
                 p.StandardInput.WriteLine("dotnet Main.dll");
             }
             else if (File.Exists("Main.out"))
             {
-                p.StandardInput.WriteLine($"{ 5000 } { 5000 }");
+                p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime }");
                 p.StandardInput.WriteLine("./Main.out");
             }
             else if (File.Exists("Main.py"))
             {
-                p.StandardInput.WriteLine($"{ 5000 } { 10000 } 0");
+                p.StandardInput.WriteLine($"{ meta.UserTime } { meta.PhysicalTime } 0");
                 p.StandardInput.WriteLine("python3 Main.py");
             }
             else

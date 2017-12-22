@@ -28,6 +28,7 @@ namespace StateMachineAndActor.Hack
             public int PeakMemory { get; set; }
             public bool IsTimeout { get; set; }
             public string Error { get; set; }
+            public bool IsOOM { get; set; }
         }
         #endregion
 
@@ -91,7 +92,7 @@ namespace StateMachineAndActor.Hack
             foreach (var x in runners)
             {
                 var runner = await x.ReadAsJsonAsync<RunnerReturn>(this);
-                if (runner.ExitCode == 0 && !runner.IsTimeout && runner.PeakMemory <= meta.Memory)
+                if (runner.ExitCode == 0 && !runner.IsTimeout && !runner.IsOOM && runner.PeakMemory <= meta.Memory)
                 {
                     continue;
                 }
@@ -145,7 +146,7 @@ namespace StateMachineAndActor.Hack
                     foreach (var y in answers)
                     {
                         var output = x.Outputs.FindSingleBlob("stdout.txt");
-                        ret.Add(new RunActorParam("HackRunActor", new BlobInfo[] 
+                        ret.Add(new RunActorParam("CompareActor", new BlobInfo[] 
                         {
                             new BlobInfo(output.Id, "out.txt"),
                             new BlobInfo(y.Id, "std.txt"),
@@ -194,7 +195,7 @@ namespace StateMachineAndActor.Hack
                     goto case "ValidateAnswer";
                 case "ValidateAnswer":
                     await SetStageAsync("ValidateAnswer");
-                    await PrepareMultiAnswerValidatorRunParamsAsync();
+                    await DeployAndRunActorsAsync((await PrepareMultiAnswerValidatorRunParamsAsync()).ToArray());
                     goto case "Finally";
                 case "Finally":
                     await SetStageAsync("Finally");

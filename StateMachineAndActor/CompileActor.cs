@@ -53,15 +53,15 @@ namespace JoyOI.ManagementService.Actors
             var commandInput = "";
 
             if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.c")))
-                commandInput = "gcc -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c99 Main.c";
+                commandInput = "gcc -Os -o Main.out -DONLINE_JUDGE -lm --std=c99 Main.c";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.cpp")))
-                commandInput = "g++ -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c++98 Main.cpp";
+                commandInput = "g++ -Os -o Main.out -DONLINE_JUDGE -lm --std=c++98 Main.cpp";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main11.cpp")))
-                commandInput = "g++ -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c++11 Main11.cpp";
+                commandInput = "g++ -Os -o Main.out -DONLINE_JUDGE -lm --std=c++11 Main11.cpp";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main14.cpp")))
-                commandInput = "g++ -O2 -o Main.out -DONLINE_JUDGE -lm --static --std=c++14 Main14.cpp";
+                commandInput = "g++ -Os -o Main.out -DONLINE_JUDGE -lm --std=c++14 Main14.cpp";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.pas")))
-                commandInput = "fpc -O2 -oMain.out -dONLINE_JUDGE Main.pas";
+                commandInput = "fpc -Og -oMain.out -dONLINE_JUDGE Main.pas";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.java")))
             {
                 commandInput = "javac-jar Main.java Main Main.jar";

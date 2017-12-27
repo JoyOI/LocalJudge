@@ -61,7 +61,7 @@ namespace JoyOI.ManagementService.Actors
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main14.cpp")))
                 commandInput = "g++ -Os -o Main.out -DONLINE_JUDGE -lm --std=c++14 Main14.cpp";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.pas")))
-                commandInput = "fpc -Og -oMain.out -dONLINE_JUDGE Main.pas";
+                commandInput = "fpc -Os -oMain.out -dONLINE_JUDGE Main.pas";
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Main.java")))
             {
                 commandInput = "javac-jar Main.java Main Main.jar";

@@ -53,12 +53,7 @@ namespace StateMachineAndActor.HackAll
         {
             var meta = await InitialBlobs.FindSingleBlob("limit.json").ReadAsJsonAsync<Limitations>(this);
             var ret = new List<RunActorParam>();
-            var actors = StartedActors.Where(x => x.Tag.StartsWith("Hackee="));
-
-            var answers = StartedActors
-                .Where(x => x.Tag == "Standard")
-                .SelectMany(x => x.Outputs)
-                .Where(x => x.Name == "stdout.txt");
+            var actors = StartedActors.Where(x => x.Name == "HackRunActor" && x.Stage == "GenerateHackeeAnswer");
 
             foreach (var x in actors)
             {
@@ -70,17 +65,14 @@ namespace StateMachineAndActor.HackAll
 
                 if (runner.ExitCode == 0 && !runner.IsTimeout && runner.PeakMemory <= meta.Memory)
                 {
-                    foreach (var y in answers)
+                    var output = x.Outputs.FindSingleBlob("stdout.txt");
+                    ret.Add(new RunActorParam("CompareActor", new BlobInfo[]
                     {
-                        var output = x.Outputs.FindSingleBlob("stdout.txt");
-                        ret.Add(new RunActorParam("HackRunActor", new BlobInfo[]
-                        {
                             new BlobInfo(output.Id, "out.txt"),
-                            new BlobInfo(y.Id, "std.txt"),
+                            InitialBlobs.FindSingleBlob("std.txt"),
                             validator,
                             InitialBlobs.FindSingleBlob("limit.json")
-                        }, x.Tag));
-                    }
+                    }, x.Tag));
                 }
             }
 
@@ -106,7 +98,7 @@ namespace StateMachineAndActor.HackAll
                     goto case "Finally";
                 case "Finally":
                     await SetStageAsync("Finally");
-                    await HttpInvokeAsync(HttpMethod.Post, "/management/hack/stagechange/" + this.Id, null);
+                    HttpInvokeAsync(HttpMethod.Post, "/management/hack/stagechange/" + this.Id, null);
                     break;
             }
         }

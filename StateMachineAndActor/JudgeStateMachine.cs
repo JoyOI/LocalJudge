@@ -125,7 +125,7 @@ namespace StateMachineAndActor.JoyOI
                     goto case "Finally";
                 case "Finally":
                     await SetStageAsync("Finally");
-                    await HttpInvokeAsync(HttpMethod.Post, "/management/judge/stagechange/" + this.Id, null);
+                    HttpInvokeAsync(HttpMethod.Post, "/management/judge/stagechange/" + this.Id, null);
                     break;
             }
         }

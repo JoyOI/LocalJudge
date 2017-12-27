@@ -199,7 +199,7 @@ namespace StateMachineAndActor.Hack
                     goto case "Finally";
                 case "Finally":
                     await SetStageAsync("Finally");
-                    await HttpInvokeAsync(HttpMethod.Post, "/management/hack/stagechange/" + this.Id, null);
+                    HttpInvokeAsync(HttpMethod.Post, "/management/hack/stagechange/" + this.Id, null);
                     break;
             }
         }
